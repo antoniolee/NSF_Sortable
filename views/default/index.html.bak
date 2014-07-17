@@ -1,0 +1,243 @@
+{{extend 'layout.html'}}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <script src="//code.jquery.com/jquery-1.9.1.js"></script>
+  <script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+</head>
+<body>
+
+<div class="container">
+
+	<!-- Name Cards -->		
+	
+	<div class = "row">
+		<div class ="span8">
+			<ul id="sortable">
+			
+			  <li class="ui-state-default"><div>		
+					<div class="left">
+						<img src="/NSF_Sortable/static/w-f-1.png" height="100" width="75" alt="My Logo" />
+					</div>
+			    	
+			    <div class = "left2">
+			    	<div id = "chartDiv1"></div>
+			    </div>
+			  </div></li>
+			  
+			  <li class="ui-state-default"><div>		
+					<div class="left">
+						<img src="/NSF_Sortable/static/w-f-2.png" height="100" width="75" alt="My Logo" />
+					</div>
+			    	
+			    <div class = "left2">
+			    	<div id = "chartDiv2"></div>
+			    </div>
+			  </div></li>
+			  
+			  <li class="ui-state-default"><div>		
+					<div class="left">
+						<img src="/NSF_Sortable/static/w-f-3.png" height="100" width="75" alt="My Logo" />
+					</div>
+			    	
+			    <div class = "left2">
+			    	<div id = "chartDiv3"></div>
+			    </div>
+			  </div></li>
+			  
+			  <li class="ui-state-default"><div>		
+					<div class="left">
+						<img src="/NSF_Sortable/static/w-f-4.png" height="100" width="75" alt="My Logo" />
+					</div>
+			    	
+			    <div class = "left2">
+			    	<div id = "chartDiv4"></div>
+			    </div>
+			  </div></li>
+			  
+			  <li class="ui-state-default"><div>		
+					<div class="left">
+						<img src="/NSF_Sortable/static/w-f-5.png" height="100" width="75" alt="My Logo" />
+					</div>
+			    	
+			    <div class = "left2">
+			    	<div id = "chartDiv5"></div>
+			    </div>
+			  </div></li>
+			  
+			  <li class="ui-state-default"><div>		
+					<div class="left">
+						<img src="/NSF_Sortable/static/w-f-6.png" height="100" width="75" alt="My Logo" />
+					</div>
+			    	
+			    <div class = "left2">
+			    	<div id = "chartDiv6"></div>
+			    </div>
+			  </div></li>
+			  
+			</ul>
+		</div>
+		
+					<!-- Introduction / Tutorial Text -->
+		<div class= "span4">
+			<h1 id="topHeader" class="center"> Sortable </h1>
+		<hr>
+		 <strong>1)	Welcome! </strong>
+		  This project is an NSF-funded study for a collaborative team from UCSC, 
+		  UT Austin, and the Los Alamos National Laboratory (LANL), to create an 
+		  agent-based model of data from a data-warehouse accumulated by San Jose 
+		  Unified School District. 
+		
+		<br><br>
+			
+			<strong>2)  To get started </strong> arrange the name cards by  _______ ,
+			top being the best and bottom being the worst.
+		
+		<br><br>
+
+			<strong>3) To save</strong> 
+      your results, create an account and 
+			Press "Save Results" to save your results.
+		</div>	
+		
+	</div>	
+</div>
+ 
+<script>
+$(document).ready(function(){
+	
+	
+	// ---------------- Sortable ------------------
+	
+	$(function() {
+    $( "#sortable" ).sortable({
+      placeholder: "portlet-placeholder ui-state-highlight"
+    });
+    $( "#sortable" ).disableSelection();
+  });
+	
+	// ---------------- Jquery UI Portlet Javascript -------------------->
+	  $(function() {
+    $( ".column" ).sortable({
+      connectWith: ".column",
+      handle: ".portlet-header",
+      cancel: ".portlet-toggle",
+      placeholder: "portlet-placeholder ui-corner-all ui-state-highlight"
+    });
+ 
+    $( ".portlet" )
+      .addClass( "ui-widget ui-widget-content ui-helper-clearfix ui-corner-all" )
+      .find( ".portlet-header" )
+        .addClass( "ui-widget-header ui-corner-all" )
+        .prepend( "<span class='ui-icon ui-icon-minusthick portlet-toggle'></span>");
+ 
+    $( ".portlet-toggle" ).click(function() {
+      var icon = $( this );
+      icon.toggleClass( "ui-icon-minusthick ui-icon-plusthick" );
+      icon.closest( ".portlet" ).find( ".portlet-content" ).toggle();
+    });
+  });
+	// ----------------END Jquery UI Portlet Javascript -------------------->
+		
+// <=============== START GRAPH JAVASCRIPT ==========================> 
+        
+    var emptySeries = [0,0,0,0,0,0];
+    var value1, value2, value3, result;
+    
+      $.jqplot.config.enablePlugins = true;
+      $("#generateGraphButton").on("click", generateGraph);
+      
+      $("#saveButton").on("click", function(){
+          // Get values from the sliders
+            value1 = $( "#amount1" ).val();
+            value2 = $( "#amount2" ).val();
+            value3 = $( "#amount3" ).val(); 
+          var number = Math.floor((Math.random()*100)+1);
+            result = number+"%";
+         
+          $.ajax({
+              url:"{{=URL('default', 'save')}}",
+              data: {'var1': value1, 'var2': value2, 'var3': value3, 'result':result }
+          })      
+      //    alert("Entry Saved");          
+      });
+
+      	var chartOptions = {
+      		// Only animate if we're not using excanvas (not in IE 7 or IE 8)..
+            animate: !$.jqplot.use_excanvas,
+            stackSeries: true,
+      		title:{show:false},
+      		negativeSeriesColors: ["#F94545","#F94545","#F94545"],
+      		seriesDefaults:{
+                  renderer:$.jqplot.BarRenderer,
+                  pointLabels: { show: true },
+                  rendererOptions: {fillToZero: true},
+                  yaxis: 'y2axis',
+                 shadow: 'true',
+              },
+              axes: {
+                  xaxis: {
+                      renderer: $.jqplot.CategoryAxisRenderer,
+                      ticks: ['Value-Added Score','Observation Score','Student Rating of Teacher'],
+                  },     
+              
+                  y2axis:{
+                      min:-10,
+                      max:10,
+                      labelRenderer: $.jqplot.CanvasAxisLabelRenderer 
+                  }
+              },
+              highlighter: { show: true }
+      	}
+
+      	function randomNumbers(){
+      		var x = Math.floor((Math.random()*10)-(Math.random()*10));
+      		var y = Math.floor((Math.random()*10)-(Math.random()*10));
+      		var z = Math.floor((Math.random()*10)-(Math.random()*10));
+      		var array = [x,y,z];
+      		console.log(x,y,z,array);
+      		return array;
+      	}
+		 
+        function generateGraph(state){
+            // Clear the chart div before generating a new one
+            $( "#chartDiv1" ).empty();
+            $( "#chartDiv2" ).empty();
+            $( "#chartDiv3" ).empty();
+            $( "#chartDiv4" ).empty();
+            $( "#chartDiv5" ).empty();
+            $( "#chartDiv6" ).empty();
+
+	        if(state == 0){
+	            series = emptySeries;
+	        } else {
+	            series = randomNumbers();
+	        }
+	        
+	        plot1 = $.jqplot('chartDiv1', [series], chartOptions);
+	        series = randomNumbers();
+	        plot2 = $.jqplot('chartDiv2', [series], chartOptions);
+	        series = randomNumbers();
+	        plot3 = $.jqplot('chartDiv3', [series], chartOptions);
+	        series = randomNumbers();
+	        plot4 = $.jqplot('chartDiv4', [series], chartOptions);
+	        series = randomNumbers();
+	        plot5 = $.jqplot('chartDiv5', [series], chartOptions);
+	        series = randomNumbers();
+	        plot6 = $.jqplot('chartDiv6', [series], chartOptions);
+
+        }  // END OF FUNCTION
+ 
+ // <================= ADD EMPTY CHART ===========================>
+        
+        generateGraph();
+        
+  // <================= End Graph Javascript ======================>
+
+
+});
+</script>
+ 
+</body>
+</html>

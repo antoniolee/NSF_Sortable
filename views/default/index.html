@@ -1,0 +1,47 @@
+{{extend 'layout.html'}}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <script src="//code.jquery.com/jquery-1.9.1.js"></script>
+  <script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+</head>
+
+<body class = "center">
+
+<h1 id="topHeader" class="center"> Sortable </h1>
+	<hr>
+	<!-- Introduction / Tutorial Text -->
+	<div class ="row">
+		<div class= "span4">
+		 <strong>1)	Welcome! </strong>
+		  This project is an NSF-funded study for a collaborative team from UCSC, 
+		  UT Austin, and the Los Alamos National Laboratory (LANL), to create an 
+		  agent-based model of data from a data-warehouse accumulated by San Jose 
+		  Unified School District. 
+		</div>
+		
+		<div class= "span4">
+			<strong>2)  The Task: </strong> Evaluate the value of multiple teachers based on  from most effective to least.  Once you are ready, sort the cards from top being the best and bottom being the worst.
+		</div>
+		
+		<div class= "span4">
+			<strong>3) To begin</strong> hit the start button.
+		</div>
+	</div>
+
+
+
+	{{=A('Start', _class='btn btn-medium btn-primary', _href=URL('default', 'survey'))}}
+
+
+<hr>
+
+
+	{{for image in images:}}
+	<img width="75px" height="100px" src="{{=URL('download', args=image.file)}}"/>
+	{{pass}}
+
+
+</body>
+</html>

@@ -1,0 +1,144 @@
+{{extend 'layout.html'}}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <script src="//code.jquery.com/jquery-1.9.1.js"></script>
+  <script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+</head>
+
+<body class = "center">
+
+	<h1>Survey</h1>
+	<div class="container">
+		<div class="row">
+			<div class="span8 offset2">
+
+			<table class = "table table-bordered">
+			  <caption>  </caption>
+			  <tbody>
+			    <tr>
+			      <td> <strong> 1) What best describes your occupation? </strong> </td>
+			      <td> <input type="radio" name="Q1" id ="surveyQ1a" value="teacher"> Teacher </td>
+			      <td> <input type="radio" name="Q1" id ="surveyQ1b" value="faculty"> Faculty</td>
+			      <td> <input type="radio" name="Q1" id ="surveyQ1c" value="other"> Other</td>    
+			    </tr>
+
+			    <tr>
+			      <td> <strong> 2) What's your age? </strong> </td>
+			      <td> <input type="radio" name="Q2" id="surveyQ2a" value="21-30"> 21-30 </td>
+			      <td> <input type="radio" name="Q2" id="surveyQ2b" value="31-45"> 31-45 </td>
+			      <td> <input type="radio" name="Q2" id="surveyQ2c" value="46+"> 46+ </td>   
+			    </tr>
+
+			    <tr>
+			      <td> <strong> 3)  What's your favorite color?</strong> </td>
+			      <td> <input type="radio" name="Q3" id="surveyQ3a" value="blue"> Blue </td>
+			      <td> <input type="radio" name="Q3" id="surveyQ3b" value="red"> Red </td>
+			      <td> <input type="radio" name="Q3" id="surveyQ3c" value="green"> Green </td>   
+			    </tr>
+
+			    <tr>
+			      <td> <strong> 4) What's your favorite fruit?</strong> </td>
+			      <td> <input type="radio" name="Q4" id="surveyQ4a" value="apple"> Apple </td>
+			      <td> <input type="radio" name="Q4" id="surveyQ4b" value="banana"> Banana </td>
+			      <td> <input type="radio" name="Q4" id="surveyQ4c" value="orange"> Orange </td>   
+			    </tr>
+
+			  </tbody>
+			</table>
+
+			<table class= "table table-bordered">
+			  <tbody>
+			    <tr>
+			    	<td> <strong> 6) Briefly, tell us about yourself. </strong> </td>
+			    	<td> <textarea id="textAreaID" rows="5"></textarea> </td>
+			    </tr>
+			  </tbody>
+			</table>
+
+			<h4> Click submit when you are ready. </h4>
+				<a href="#myModal" class="btn btn-medium btn-primary" type="button" data-toggle="modal">Save Results</a>
+			</div>
+		</div> 
+
+			  <!--   Bootstrap Modal -->
+ 		<!-- Modal -->
+ 		<div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+ 		  <div class="modal-header">
+ 		    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+ 		    <h3 id="myModalLabel">Submit Survey</h3>
+ 		  </div>
+ 		  <div class="modal-body">
+ 		    <p class="modal-p">Check your answers. Are you ready to move on?</p>
+ 		  </div>
+ 		  <div class="modal-footer">
+ 		    <button class="btn btn" data-dismiss="modal" aria-hidden="true">No</button>
+ 		    <a href="#myModal2" id="surveyButton" class="btn btn-primary" data-dismiss="modal" type="button" data-toggle="modal">Yes </a>
+ 		  </div>
+ 		</div>
+ 		
+ 			  <!--   Bootstrap Modal -->
+ 		<!-- Modal -->
+ 		<div id="myModal2" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+ 		  <div class="modal-header">
+ 		    <h3 id="myModalLabel">Survey Successfully Saved</h3>
+ 		  </div>
+ 		  <div class="modal-body">
+ 		    <p class="modal-p">Your survey entry has been successfully saved.</p>
+ 		  </div>
+ 		  <div class="modal-footer">
+ 		    {{=A('Continue', _class="btn btn-primary", _href=URL('default','sortable'))}}
+ 		  </div>
+ 		</div>
+
+
+	</div>
+
+<script type="text/javascript">
+	$(document).ready(function(){
+		    $("#surveyButton").on("click", function(){
+
+		    value1 = "N/A";
+		    value2 = "N/A";
+		    value3 = "N/A";
+		    value4 = "N/A";	
+		    value5 = "N/A";
+		    value6 = "N/A";
+
+    	  // Get values from the sliders
+    	  	if(document.getElementById("surveyQ1a").checked){ value1 = document.getElementById("surveyQ1a").value; }
+    	  	if(document.getElementById("surveyQ1b").checked){ value1 = document.getElementById("surveyQ1b").value; }
+    	  	if(document.getElementById("surveyQ1c").checked){ value1 = document.getElementById("surveyQ1c").value; }
+
+    	  	if(document.getElementById("surveyQ2a").checked){ value2 = document.getElementById("surveyQ2a").value; }
+    	  	if(document.getElementById("surveyQ2b").checked){ value2 = document.getElementById("surveyQ2b").value; }
+    	  	if(document.getElementById("surveyQ2c").checked){ value2 = document.getElementById("surveyQ2c").value; }
+
+    	  	if(document.getElementById("surveyQ3a").checked){ value3 = document.getElementById("surveyQ3a").value; }
+    	  	if(document.getElementById("surveyQ3b").checked){ value3 = document.getElementById("surveyQ3b").value; }
+    	  	if(document.getElementById("surveyQ3c").checked){ value3 = document.getElementById("surveyQ3c").value; }
+
+    	  	if(document.getElementById("surveyQ4a").checked){ value4 = document.getElementById("surveyQ4a").value; }
+    	  	if(document.getElementById("surveyQ4b").checked){ value4 = document.getElementById("surveyQ4b").value; }
+    	  	if(document.getElementById("surveyQ4c").checked){ value4 = document.getElementById("surveyQ4c").value; }
+
+    	  	if(document.getElementById("surveyQ5a").checked){ value5 = document.getElementById("surveyQ5a").value; }
+    	  	if(document.getElementById("surveyQ5b").checked){ value5 = document.getElementById("surveyQ5b").value; }
+    	  	if(document.getElementById("surveyQ5c").checked){ value5 = document.getElementById("surveyQ5c").value; }
+      		
+      		value6 = document.getElementById("textAreaID").value;
+
+    	  $.ajax({
+              url:"{{=URL('default', 'saveSurvey')}}",
+              data: {'var1': value1, 'var2': value2, 'var3': value3, 'var4': value4, 'var5': value5, 'var6': value6 }
+
+          })      
+      //    alert("Entry Saved");          
+      });
+	});
+</script>
+
+
+</body>
+</html>

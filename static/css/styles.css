@@ -1,0 +1,71 @@
+#sortable { list-style-type: none; margin: 0; padding: 0; }
+  #sortable li { margin: 0 5px 5px 5px; padding: 5px; font-size: 1.2em; height: 1.5em; }
+  html>body #sortable li { height: 120px; line-height: 1.2em; }
+  .ui-state-highlight { height: 1.5em; line-height: 1.2em; }
+
+.ui-state-default{
+	background-color:#8AD7FF;
+}
+
+#chartDiv1 .jqplot-point-label, 
+#chartDiv2 .jqplot-point-label, 
+#chartDiv3 .jqplot-point-label, 
+#chartDiv4 .jqplot-point-label,
+#chartDiv5 .jqplot-point-label, 
+#chartDiv6 .jqplot-point-label {
+  font-size:32px;
+}
+
+#chartDiv1,
+#chartDiv2,
+#chartDiv3,
+#chartDiv4,
+#chartDiv5, 
+#chartDiv6{
+  height: 125px;
+  width:475px;
+}
+
+.center{
+	text-align:center;
+}
+
+.modal-header{
+	text-align:center;
+}
+
+.modal-p{
+	text-align:center;
+}
+
+body .modal{
+	text-align:center;
+	width:300px;
+	margin-left: -150px;
+	margin-top: 150px;
+}
+
+.percent{
+	font-size: 15px;
+}
+
+.variable{
+	color:#FF0000;
+	font-size: 15px;
+}
+  
+  .left{
+  	float:left;
+    margin-top:10px;
+    margin-left:10px;
+    padding-right:10px;
+  }
+  
+  .left2{
+  	float:left;
+    padding-right:10px;
+  }
+  
+#textAreaID{
+  width:400px;
+}

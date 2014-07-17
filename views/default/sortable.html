@@ -1,0 +1,232 @@
+{{extend 'layout.html'}}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <script src="//code.jquery.com/jquery-1.9.1.js"></script>
+  <script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+</head>
+<body>
+
+<div class="container">
+	
+	<div class = "row"> <!-- START ROW -->
+		<div class ="span8">
+			<ul id="sortable">
+			 {{for image in images:}}
+			  <li id={{=image.title}}  class="ui-state-default"><div>		
+					<div class="left">
+					<img width="75px" height="100px" src="{{=URL('download', args=image.file)}}"/>
+					</div>
+			    <div class = "left2">
+			    	<div id = "chartDiv{{=image.id}}"></div>
+			    </div>
+			  </div></li>
+			 	{{pass}}  
+			</ul>
+		</div>
+		
+					<!-- Introduction / Tutorial Text -->
+		<div class= "span4">
+			<h1 id="topHeader" class="center"> Sortable </h1>
+		<hr>
+		 <strong>1)	Welcome! </strong>
+		  This project is an NSF-funded study for a collaborative team from UCSC, 
+		  UT Austin, and the Los Alamos National Laboratory (LANL), to create an 
+		  agent-based model of data from a data-warehouse accumulated by San Jose 
+		  Unified School District. 
+		
+		<br><br>
+			
+			<strong>2)  To get started </strong> arrange the name cards by  _______ ,
+			top being the best and bottom being the worst.
+		
+		<br><br>
+
+			<strong>3) To save</strong> 
+      your results, create an account and 
+			Press "Save Results" to save your results.
+		
+    <hr>
+    <a href="#myModal" class="btn btn-medium btn-success btn-block" type="button" data-toggle="modal">Save Results</a>
+    <br>
+    </div>	
+
+</div>  <!-- END ROW -->
+
+
+    <!--   Bootstrap Modal -->
+    <!-- Modal -->
+    <div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 id="myModalLabel">Submit Entry</h3>
+      </div>
+      <div class="modal-body">
+        <p class="modal-p">Double check your order. Are you ready to submit?</p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn" data-dismiss="modal" aria-hidden="true">Nevermind</button>
+        <a href="#myModal2" id="saveButton" class="btn btn-primary" data-dismiss="modal" type="button" data-toggle="modal">Save changes</a>
+      </div>
+    </div>
+    
+        <!--   Bootstrap Modal -->
+    <!-- Modal -->
+    <div id="myModal2" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-header">
+        <h3 id="myModalLabel">Entry Successfully Saved</h3>
+      </div>
+      <div class="modal-body">
+        <p class="modal-p">Your entry has been successfully saved. Thank you for participating!</p>
+      </div>
+      <div class="modal-footer">
+        {{=A('Back to Home', _class="btn btn-primary", _href=URL('default','index'))}}
+      </div>
+    </div>
+
+
+<script>
+$(document).ready(function(){
+	
+  // AJAX / DATABASE call
+	    var OG_order;
+      var new_order;
+      var card_data;
+      var series1, series2, series3, series4;
+    
+      $.jqplot.config.enablePlugins = true;
+      
+      $("#saveButton").on("click", function(){
+          
+          new_order = $("#sortable").sortable('toArray').toString();
+          card_data = [series1, series2, series3, series4].toString();
+
+          $.ajax({
+              url:"{{=URL('default', 'saveSortable')}}",
+              data: {'varA': OG_order, 'varB': new_order, 'varC': card_data}
+          })      
+      //    alert("Entry Saved");          
+      });
+
+
+	// ---------------- Sortable ------------------
+	
+  $("#sortable").sortable({
+      update: function (event, ui) {
+          // Create a string which is the order of the sortable list
+          var order = $("#sortable").sortable('toArray').toString();
+          console.log(order);
+      }
+  });  
+
+	$(function() {
+    $( "#sortable" ).sortable({
+      placeholder: "portlet-placeholder ui-state-highlight"
+    });
+    $( "#sortable" ).disableSelection();
+  });
+		
+// <=============== START GRAPH JAVASCRIPT ==========================> 
+        
+      	var chartOptions = {
+      		// Only animate if we're not using excanvas (not in IE 7 or IE 8)..
+            animate: !$.jqplot.use_excanvas,
+            stackSeries: false,
+      		title:{show:false},
+      		seriesColors: ["#00A6FF","#FFC500","#F94545"],
+      		seriesDefaults:{
+                  renderer:$.jqplot.BarRenderer,
+                  pointLabels: { show: true },
+                  rendererOptions: {
+                  	fillToZero: true,
+                  	varyBarColor: true,
+                  },
+                  yaxis: 'y2axis',
+                  shadow: false,   // show shadow or not.
+              },
+              axes: {
+                  xaxis: {
+                      renderer: $.jqplot.CategoryAxisRenderer,
+                     // ticks: ['Value-Added Score','Observation Score','Student Rating of Teacher'],
+                  },     
+              
+                  y2axis:{
+                      min:0,
+                      max:10,
+                      labelRenderer: $.jqplot.CanvasAxisLabelRenderer 
+                  }
+              },
+              highlighter: { show: true },
+              series:[{pointLabels:{
+      			    location:'s',
+      			    ypadding: -10,
+      			  }}],
+      	}
+
+      	function randomNumbers(){
+      		var x = Math.floor((Math.random()*10));
+      		var y = Math.floor((Math.random()*10));
+      		var z = Math.floor((Math.random()*10));
+      		var array = [["Value-Added Score",x],["Observation Score",y],["Student Rating of Teacher",z]];
+      		console.log(x,y,z,array);
+
+          var test = array.toString();
+          console.log(test)
+      		return array;
+      	}
+
+      	function valueAddedScore(){
+      		var x = Math.floor((Math.random()*10));
+      		var array = ["Value-Added Score",x];
+     		return array;
+      	}
+
+      	function observationScore(){
+      		var x = Math.floor((Math.random()*10));
+      		var array = ["Observation Score",x];
+     		return array;
+      	}
+
+      	function studentRatingOfTeacher(){
+      		var x = Math.floor((Math.random()*10));
+      		var array = ["Student Rating of Teacher",x];
+     		return array;
+      	}
+		 
+        function generateGraph(state){
+            // Clear the chart div before generating a new one
+            $( "#chartDiv1" ).empty();
+            $( "#chartDiv2" ).empty();
+            $( "#chartDiv3" ).empty();
+            $( "#chartDiv4" ).empty();
+
+            // You have to use below functions if you get data to implement, for now you can
+            // you the randomNumbers() function to generate random numbers.
+
+	        var x = valueAddedScore();
+	        var y = observationScore();
+	        var z = studentRatingOfTeacher();
+
+	        series1 = randomNumbers();
+          series2 = randomNumbers();
+          series3 = randomNumbers();
+          series4 = randomNumbers();
+
+	        plot1 = $.jqplot('chartDiv1', [series1], chartOptions);
+	        plot2 = $.jqplot('chartDiv2', [series2], chartOptions);
+	        plot3 = $.jqplot('chartDiv3', [series3], chartOptions);
+	        plot4 = $.jqplot('chartDiv4', [series4], chartOptions);
+        }  
+        
+        // Generate Graphs
+        generateGraph();
+        
+  // <================= End Graph Javascript ======================>
+
+
+});
+</script>
+ 
+</body>
+</html>
